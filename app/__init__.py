@@ -6,13 +6,16 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 
-# from flask_login import LoginManager
+from flask_login import LoginManager
+
 # from .config_default import BASE_DIR
 
 # --- Extension Instances ---
 # Initialize extensions here, but without app context initially
 db = SQLAlchemy() # Create the SQLAlchemy instance
 migrate = Migrate()
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
 # login_manager = LoginManager()
 # login_manager.login_view = 'auth.login'
 
@@ -44,12 +47,21 @@ def create_app(config_class=None):
         # This uses the default defined in config_default.py
         print("Warning: DATABASE_URL environment variable not set. Using default URI from config.")
 
+    from app.routes.auth import auth_bp
+    app.register_blueprint(auth_bp, url_prefix='/auth')
 
+    
     # --- Initialize Extensions ---
     # Initialize Flask extensions with the app instance
     db.init_app(app) # Associate the db instance with the Flask app
     migrate.init_app(app, db)
-    # login_manager.init_app(app)
+    login_manager.init_app(app)
+
+    from app.models import User
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
     # --- Register Blueprints ---
     # Import and register blueprints here later
