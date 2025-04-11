@@ -3,14 +3,16 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 # Import other extensions later when needed
-# from flask_migrate import Migrate
+from flask_migrate import Migrate
+from dotenv import load_dotenv
+
 # from flask_login import LoginManager
 # from .config_default import BASE_DIR
 
 # --- Extension Instances ---
 # Initialize extensions here, but without app context initially
 db = SQLAlchemy() # Create the SQLAlchemy instance
-# migrate = Migrate()
+migrate = Migrate()
 # login_manager = LoginManager()
 # login_manager.login_view = 'auth.login'
 
@@ -46,7 +48,7 @@ def create_app(config_class=None):
     # --- Initialize Extensions ---
     # Initialize Flask extensions with the app instance
     db.init_app(app) # Associate the db instance with the Flask app
-    # migrate.init_app(app, db)
+    migrate.init_app(app, db)
     # login_manager.init_app(app)
 
     # --- Register Blueprints ---
@@ -56,6 +58,8 @@ def create_app(config_class=None):
     # from .routes.main import main_bp
     # app.register_blueprint(main_bp)
 
+
+
     # --- Define a simple test route (optional) ---
     @app.route('/hello')
     def hello():
@@ -63,4 +67,5 @@ def create_app(config_class=None):
         return 'Hello, PathGenie World! Database should be configured.'
 
     # --- Return the configured app instance ---
+    from . import models
     return app
