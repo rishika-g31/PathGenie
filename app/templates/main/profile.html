@@ -1,0 +1,68 @@
+{% extends "base.html" %} {# Assuming you have a base.html template #} {% block
+content %}
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6 text-gray-800">Edit Your Profile</h1>
+
+  {# Flash messages section - reuse from base.html or include here #} {% with
+  messages = get_flashed_messages(with_categories=true) %} {% if messages %} {%
+  for category, message in messages %}
+  <div
+    class="p-4 mb-4 text-sm rounded-lg {% if category == 'danger' %} bg-red-100 text-red-700 {% elif category == 'success' %} bg-green-100 text-green-700 {% else %} bg-blue-100 text-blue-700 {% endif %}"
+    role="alert"
+  >
+    {{ message }}
+  </div>
+  {% endfor %} {% endif %} {% endwith %}
+
+  <form
+    method="POST"
+    action="{{ url_for('main.profile') }}"
+    novalidate
+    class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+  >
+    {{ form.hidden_tag() }} {# Include CSRF token #}
+
+    <div class="mb-4">
+      {{ form.learning_goal.label(class="block text-gray-700 text-sm font-bold
+      mb-2") }} {{ form.learning_goal(class="shadow appearance-none border
+      rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none
+      focus:shadow-outline h-24", rows=4) }} {% if form.learning_goal.errors %}
+      <div class="text-red-500 text-xs italic mt-1">
+        {% for error in form.learning_goal.errors %}<span>{{ error }}</span>{%
+        endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="mb-4">
+      {{ form.skill_level.label(class="block text-gray-700 text-sm font-bold
+      mb-2") }} {{ form.skill_level(class="shadow border rounded w-full py-2
+      px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline")
+      }} {% if form.skill_level.errors %}
+      <div class="text-red-500 text-xs italic mt-1">
+        {% for error in form.skill_level.errors %}<span>{{ error }}</span>{%
+        endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="mb-6">
+      {{ form.preferred_style.label(class="block text-gray-700 text-sm font-bold
+      mb-2") }} {{ form.preferred_style(class="shadow border rounded w-full py-2
+      px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline")
+      }} {% if form.preferred_style.errors %}
+      <div class="text-red-500 text-xs italic mt-1">
+        {% for error in form.preferred_style.errors %}<span>{{ error }}</span>{%
+        endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="flex items-center justify-between">
+      {{ form.submit(class="bg-blue-500 hover:bg-blue-700 text-white font-bold
+      py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer")
+      }}
+    </div>
+  </form>
+</div>
+{% endblock %}

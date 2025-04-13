@@ -9,7 +9,7 @@ def client():
         yield client
 
 def test_signup_success(client):
-    email = 'testuser1@example.com'
+    email = 'testuser9@example.com'
     response = client.post('/auth/signup', data={
         'email': email,
         'password': 'securepass123',
@@ -22,7 +22,7 @@ def test_signup_success(client):
 
     
 def test_login_success(client):
-    email = 'testuser@example.com'
+    email = 'testuser9@example.com'
 
     response = client.post('/auth/login', data={
         'email': email,

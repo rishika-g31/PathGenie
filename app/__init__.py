@@ -47,8 +47,7 @@ def create_app(config_class=None):
         # This uses the default defined in config_default.py
         print("Warning: DATABASE_URL environment variable not set. Using default URI from config.")
 
-    from app.routes.auth import auth_bp
-    app.register_blueprint(auth_bp, url_prefix='/auth')
+    
     
     # --- Initialize Extensions ---
     # Initialize Flask extensions with the app instance
@@ -64,6 +63,9 @@ def create_app(config_class=None):
 
     # --- Register Blueprints ---
     # Import and register blueprints here later
+    from app.routes.auth import auth_bp
+    app.register_blueprint(auth_bp, url_prefix='/auth')
+    
     from .routes.main import main_bp
     app.register_blueprint(main_bp)
 
