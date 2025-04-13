@@ -49,7 +49,6 @@ def create_app(config_class=None):
 
     from app.routes.auth import auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
-
     
     # --- Initialize Extensions ---
     # Initialize Flask extensions with the app instance
@@ -65,12 +64,8 @@ def create_app(config_class=None):
 
     # --- Register Blueprints ---
     # Import and register blueprints here later
-    # from .routes.auth import auth_bp
-    # app.register_blueprint(auth_bp, url_prefix='/auth')
-    # from .routes.main import main_bp
-    # app.register_blueprint(main_bp)
-
-
+    from .routes.main import main_bp
+    app.register_blueprint(main_bp)
 
     # --- Define a simple test route (optional) ---
     @app.route('/hello')
