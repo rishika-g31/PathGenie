@@ -28,10 +28,10 @@ class SkillLevelEnum(enum.Enum):
     INTERMEDIATE = "Intermediate"
     ADVANCED = "Advanced"
 
-class ProgressStatusEnum(enum.Enum):
-    NOT_STARTED = "Not Started"
-    IN_PROGRESS = "In Progress"
-    COMPLETED = "Completed"
+# class ProgressStatusEnum(enum.Enum):
+#     NOT_STARTED = "Not Started"
+#     IN_PROGRESS = "In Progress"
+#     COMPLETED = "Completed"
 
 # --- Define Models ---
 
@@ -56,7 +56,7 @@ class User(UserMixin,db.Model):
     # --- Relationships ---
     # Define relationship to the UserResourceProgress association table
     # Use back_populates for clearer bidirectional relationship definition
-    progress = db.relationship('UserResourceProgress', back_populates='user', cascade="all, delete-orphan")
+    # progress = db.relationship('UserResourceProgress', back_populates='user', cascade="all, delete-orphan")
 
     
     def set_password(self, password):
@@ -114,7 +114,7 @@ class Resource(db.Model):
 
     # --- Relationships ---
     # Define relationship to the UserResourceProgress association table
-    user_progress = db.relationship('UserResourceProgress', back_populates='resource', cascade="all, delete-orphan")
+    # user_progress = db.relationship('UserResourceProgress', back_populates='resource', cascade="all, delete-orphan")
 
 
     def __repr__(self):
@@ -122,30 +122,30 @@ class Resource(db.Model):
 
 
 # --- Added UserResourceProgress Model ---
-class UserResourceProgress(db.Model):
-    """
-    Association table to track user progress on resources (Many-to-Many).
-    Uses Enum for status.
-    """
-    __tablename__ = 'user_resource_progress'
+# class UserResourceProgress(db.Model):
+#     """
+#     Association table to track user progress on resources (Many-to-Many).
+#     Uses Enum for status.
+#     """
+#     __tablename__ = 'user_resource_progress'
 
-    # Composite primary key
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    resource_id = db.Column(db.Integer, db.ForeignKey('resources.id'), primary_key=True)
+#     # Composite primary key
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+#     resource_id = db.Column(db.Integer, db.ForeignKey('resources.id'), primary_key=True)
 
-    # Progress tracking fields
-    status = db.Column(db.Enum(ProgressStatusEnum, values_callable=lambda obj: [e.value for e in obj]),
-                       nullable=False,
-                       default=ProgressStatusEnum.NOT_STARTED, # Default status
-                       name="progress_status_enum")
-    started_at = db.Column(db.DateTime, nullable=True)
-    completed_at = db.Column(db.DateTime, nullable=True) # Timestamp when completed
+#     # Progress tracking fields
+#     status = db.Column(db.Enum(ProgressStatusEnum, values_callable=lambda obj: [e.value for e in obj]),
+#                        nullable=False,
+#                        default=ProgressStatusEnum.NOT_STARTED, # Default status
+#                        name="progress_status_enum")
+#     started_at = db.Column(db.DateTime, nullable=True)
+#     completed_at = db.Column(db.DateTime, nullable=True) # Timestamp when completed
 
-    # --- Relationships ---
-    # Define relationships back to User and Resource using back_populates
-    user = db.relationship('User', back_populates='progress')
-    resource = db.relationship('Resource', back_populates='user_progress')
+#     # --- Relationships ---
+#     # Define relationships back to User and Resource using back_populates
+#     user = db.relationship('User', back_populates='progress')
+#     resource = db.relationship('Resource', back_populates='user_progress')
 
-    def __repr__(self):
-        return f"<Progress User {self.user_id} - Resource {self.resource_id} ({self.status.value})>"
+#     def __repr__(self):
+#         return f"<Progress User {self.user_id} - Resource {self.resource_id} ({self.status.value})>"
 

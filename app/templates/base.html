@@ -1,25 +1,78 @@
-<!-- app/templates/base.html -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>PathGenie</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="{{ url_for('static', filename='css/style.css') }}"
+      rel="stylesheet"
+    />
+    <title>{{ title + " - PathGenie" if title else "PathGenie" }}</title>
+    {# Add other head elements like favicons here #}
   </head>
-  <body>
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %}
-    <ul>
-      {% for category, message in messages %}
-      <li><strong>{{ category }}:</strong> {{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %} {% endwith %}
-
-    <nav>
-      <a href="{{ url_for('auth.login') }}">Login</a> |
-      <a href="{{ url_for('auth.signup') }}">Sign Up</a>
+  <body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <nav class="bg-white shadow-md p-4 mb-6">
+      <div class="container mx-auto flex justify-between items-center">
+        <a
+          href="{{ url_for('main.dashboard') }}"
+          class="text-xl font-bold text-blue-600 hover:text-blue-800"
+        >
+          PathGenie ✨
+        </a>
+        <div>
+          {# Navigation Links based on login status #} {% if
+          current_user.is_authenticated %}
+          <a
+            href="{{ url_for('main.dashboard') }}"
+            class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+            >Dashboard</a
+          >
+          <a
+            href="{{ url_for('main.learning_path') }}"
+            class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+            >My Path</a
+          >
+          <a
+            href="{{ url_for('main.profile') }}"
+            class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+            >Profile</a
+          >
+          <a
+            href="{{ url_for('auth.logout') }}"
+            class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+            >Logout</a
+          >
+          {% else %}
+          <a
+            href="{{ url_for('auth.login') }}"
+            class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+            >Login</a
+          >
+          <a
+            href="{{ url_for('auth.signup') }}"
+            class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-2 px-3 rounded focus:outline-none focus:shadow-outline ml-2"
+          >
+            Sign Up
+          </a>
+          {% endif %}
+        </div>
+      </div>
     </nav>
 
-    {% block content %}{% endblock %}
+    <main class="container mx-auto px-4 py-4">
+      {# Content block for child templates #} {% block content %} {% endblock %}
+    </main>
+
+    <footer class="bg-white mt-12 py-4 text-center text-gray-600 text-sm">
+      <div class="container mx-auto">
+        &copy; {{ now.year }} PathGenie. All rights reserved. {# Add current
+        year - requires passing 'now' from Flask or using JS #} {# Simplified:
+        &copy; 2025 PathGenie #}
+      </div>
+    </footer>
+
+    {# Optional: Add JavaScript files here #} {#
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    #}
   </body>
 </html>
