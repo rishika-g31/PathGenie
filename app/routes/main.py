@@ -50,7 +50,7 @@ def profile():
         try:
             db.session.commit()
             flash('Your profile has been updated!', 'success')
-            return redirect(url_for('main.profile')) # Redirect back to profile page
+            return redirect(url_for('main.learning_path')) 
         except Exception as e:
             db.session.rollback() # Rollback in case of error
             flash(f'Error updating profile: {e}', 'danger')
