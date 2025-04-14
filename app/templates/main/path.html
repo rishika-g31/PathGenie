@@ -1,0 +1,107 @@
+{% extends "base.html" %} {% block content %}
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6 text-gray-800">Your Learning Path</h1>
+
+  {# Flash messages section #} {% with messages =
+  get_flashed_messages(with_categories=true) %} {% if messages %} {% for
+  category, message in messages %}
+  <div
+    class="p-4 mb-4 text-sm rounded-lg {% if category == 'danger' %} bg-red-100 text-red-700 {% elif category == 'success' %} bg-green-100 text-green-700 {% elif category == 'warning' %} bg-yellow-100 text-yellow-700 {% else %} bg-blue-100 text-blue-700 {% endif %}"
+    role="alert"
+  >
+    {{ message }}
+  </div>
+  {% endfor %} {% endif %} {% endwith %}
+
+  <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    {% if path %}
+    <p class="text-gray-700 mb-4">
+      Here are the suggested resources based on your profile:
+    </p>
+    <ul class="list-disc space-y-4 pl-5">
+      {% for resource in path %}
+      <li class="border-b border-gray-200 pb-4">
+        <h3
+          class="text-lg font-semibold text-blue-600 hover:text-blue-800 mb-1"
+        >
+          {# Make title a link, open in new tab #}
+          <a
+            href="{{ resource.url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{ resource.title }}
+          </a>
+        </h3>
+        <div class="text-sm text-gray-600">
+          <span
+            class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-semibold text-gray-700 mr-2 mb-1"
+          >
+            Type: {{ resource.resource_type.value }}
+          </span>
+          <span
+            class="inline-block bg-teal-200 rounded-full px-3 py-1 text-xs font-semibold text-teal-700 mr-2 mb-1"
+          >
+            Difficulty: {{ resource.difficulty.value }}
+          </span>
+          {% if resource.topic %}
+          <span
+            class="inline-block bg-indigo-200 rounded-full px-3 py-1 text-xs font-semibold text-indigo-700 mr-2 mb-1"
+          >
+            Topic: {{ resource.topic.name }}
+          </span>
+          {% endif %} {# Add estimated time if available #} {% if
+          resource.estimated_time %}
+          <span
+            class="inline-block bg-orange-200 rounded-full px-3 py-1 text-xs font-semibold text-orange-700 mb-1"
+          >
+            Est. Time: {{ resource.estimated_time }}
+          </span>
+          {% endif %}
+        </div>
+        {# Placeholder for progress tracking button - Phase 3, Step 6 #} {#
+        <button class="mt-2 text-xs ...">Mark as Complete</button> #}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %} {# Check if profile is complete to give a more specific message
+    #} {% if current_user.learning_goal and current_user.skill_level and
+    current_user.preferred_style %}
+    <p class="text-gray-700">
+      We couldn't find any resources matching your current profile settings
+      (Goal: {{ current_user.learning_goal }}, Level: {{
+      current_user.skill_level.value }}, Style: {{ current_user.preferred_style
+      }}).
+    </p>
+    <p class="text-gray-700 mt-2">
+      You could try
+      <a
+        href="{{ url_for('main.profile') }}"
+        class="text-blue-600 hover:underline"
+        >adjusting your profile</a
+      >
+      or check back later as more resources are added.
+    </p>
+    {% else %} {# This case should ideally be caught by the redirect in the
+    route, but as a fallback: #}
+    <p class="text-gray-700">
+      Please
+      <a
+        href="{{ url_for('main.profile') }}"
+        class="text-blue-600 hover:underline"
+        >complete your profile</a
+      >
+      to generate a learning path.
+    </p>
+    {% endif %} {% endif %}
+
+    <div class="mt-6">
+      <a
+        href="{{ url_for('main.dashboard') }}"
+        class="text-blue-600 hover:underline"
+        >&larr; Back to Dashboard</a
+      >
+    </div>
+  </div>
+</div>
+{% endblock %}
