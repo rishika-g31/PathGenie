@@ -10,7 +10,7 @@
     <title>{{ title + " - PathGenie" if title else "PathGenie" }}</title>
     {# Add other head elements like favicons here #}
   </head>
-  <body class="bg-gray-100 font-sans leading-normal tracking-normal">
+  <body class="bg-gray-100 h-screen flex-col font-sans">
     <nav class="bg-white shadow-md p-4 mb-6">
       <div class="container mx-auto flex justify-between items-center">
         <a
@@ -31,6 +31,11 @@
             href="{{ url_for('main.learning_path') }}"
             class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
             >My Path</a
+          >
+          <a
+            href="{{ url_for('chat.index') }}"
+            class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+            >Ask Doubt</a
           >
           <a
             href="{{ url_for('main.profile') }}"
@@ -59,11 +64,11 @@
       </div>
     </nav>
 
-    <main class="container mx-auto px-4 py-4">
+    <main class="mx-auto px-4 py-4">
       {# Content block for child templates #} {% block content %} {% endblock %}
     </main>
 
-    <footer class="bg-white mt-12 py-4 text-center text-gray-600 text-sm">
+    <footer class="bg-white mt-12 px-3 py-4 text-center text-gray-600 text-sm">
       <div class="container mx-auto">
         &copy; {{ now.year }} PathGenie. All rights reserved. {# Add current
         year - requires passing 'now' from Flask or using JS #} {# Simplified:

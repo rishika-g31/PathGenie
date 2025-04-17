@@ -6,7 +6,6 @@ from flask_migrate import Migrate       # Assuming Migrate is initialized
 from flask_login import LoginManager   # Assuming LoginManager is initialized
 from datetime import datetime, timezone # Import datetime utilities
 
-# --- Extension Instances ---
 db = SQLAlchemy()
 migrate = Migrate() # Initialize Migrate instance
 login_manager = LoginManager() # Initialize LoginManager instance
@@ -32,6 +31,7 @@ def create_app(config_class=None):
     app.config.from_object('app.config_default')
     app.config.from_pyfile('config.py', silent=True)
 
+
     database_url = os.environ.get('DATABASE_URL')
     if database_url:
         if database_url.startswith('postgres://'):
@@ -40,12 +40,18 @@ def create_app(config_class=None):
     elif not app.config.get('SQLALCHEMY_DATABASE_URI'):
         print("Warning: DATABASE_URL environment variable not set. Using default URI from config.")
 
-    if 'SECRET_KEY' in os.environ:
-        app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-    elif not app.config.get('SECRET_KEY'):
-         print("Warning: SECRET_KEY not found in environment or config files. Using default.")
+    # if 'SECRET_KEY' in os.environ:
+    #     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+    # elif not app.config.get('SECRET_KEY'):
+    #      print("Warning: SECRET_KEY not found in environment or config files. Using default.")
 
 
+    groq_api_key = os.environ.get('GROQ_API_KEY')
+    if groq_api_key:
+        app.config['GROQ_API_KEY'] = groq_api_key
+    elif not app.config.get('GROQ_API_KEY'):
+         print("Warning: GROQ_API_KEY not found in environment or config files. Using default.")
+        
     # --- Initialize Extensions ---
     db.init_app(app)
     migrate.init_app(app, db) # Pass db instance to Migrate
@@ -68,6 +74,8 @@ def create_app(config_class=None):
     from .routes.main import main_bp
     app.register_blueprint(main_bp)
 
+    from .routes.chat import chat_bp
+    app.register_blueprint(chat_bp)
 
     # --- Define a simple test route (optional) ---
     @app.route('/hello')
